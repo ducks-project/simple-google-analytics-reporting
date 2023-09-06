@@ -1,5 +1,5 @@
 {
-    "name": "ducks-projet/simple-google-analytics-reporting",
+    "name": "ducks-project/simple-google-analytics-reporting",
     "type": "library",
     "description": "Google Analytics PHP Simple Interface for Core Reporting API v3|v4",
     "keywords": ["google", "analytics", "reporting", "oauth2"],
