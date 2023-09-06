@@ -20,4 +20,6 @@ class RunReportResponse extends Response
 
         return $this;
     }
+
+    //public function setTotal(Total )
 }
