@@ -1,0 +1,47 @@
+{
+    "name": "ducks-projet/simple-google-analytics-reporting",
+    "type": "library",
+    "description": "Google Analytics PHP Simple Interface for Core Reporting API v3|v4",
+    "keywords": ["google", "analytics", "reporting", "oauth2"],
+    "homepage": "https://github.com/ducks-project/simple-google-analytics-reporting/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adrien Loyant",
+            "email": "donald_duck@team-df.org",
+            "homepage": "http://adrien.loyant.net",
+            "role": "Owner"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "ducks-project/spl-types": "^1.2",
+        "firebase/php-jwt": "^6.0",
+        "google/auth": "^1.29",
+        "psr/http-client": "^1.0",
+        "psr/http-client-implementation": "^1.0"
+    },
+    "require-dev": {
+        "php-http/mock-client": "^1.0"
+    },
+    "suggest": {
+        "ext-openssl": "^7.4|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "DucksProject\\Component\\SimpleGoogleAnalyticsReporting\\": ""
+        },
+        "files": [
+            "Resources/functions.php"
+        ],
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "minimum-stability": "stable",
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}

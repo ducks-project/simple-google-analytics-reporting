@@ -1,0 +1,21 @@
+{
+    "name": "ducks-projet/simple-google-analytics-reporting",
+    "description": "Google Analytics PHP Simple Interface for Core Reporting API v3|v4",
+    "type": "library",
+    "require": {
+        "php": ">=7."
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "DucksProjet\\SimpleGoogleAnalyticsReporting\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Adrien Loyant",
+            "email": "donald_duck@team-df.org"
+        }
+    ],
+    "minimum-stability": "dev"
+}
