@@ -1,0 +1,48 @@
+# Managed by Composer
+/app/bootstrap.php.cache
+/var/bootstrap.php.cache
+/build/*
+/bin/*
+!bin/console
+/vendor/
+
+# PHPUnit
+/app/phpunit.xml
+/phpunit.xml
+.phpunit.result.cache
+
+# Composer PHAR
+/composer.phar
+#/composer.lock
+
+# Sublime project
+*.tmplanguage.cache
+*.tmpPreferences.cache
+*.stTheme.cache
+*.sublime-project
+*.sublime-workspace
+
+# Idea
+.idea/*
+
+# Swap & temp files
+*~
+*.tmp
+*.bak
+*.swp
+.*.kate-swp
+.swp.*
+.metadata
+.directory
+.project
+local.properties
+.settings/
+.loadpath
+*.kdev4
+.kdev4/
+.vagrant/
+/test
+/tests
+/.creds/
+.DS_Store
+.history/
