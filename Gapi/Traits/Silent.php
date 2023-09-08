@@ -1,6 +1,6 @@
 <?php
 
-namespace DucksProject\Component\SimpleGoogleAnalyticsReporting\Gapi\Traits;
+namespace Ducks\Component\SimpleGoogleAnalyticsReporting\Gapi\Traits;
 
 trait Silent
 {

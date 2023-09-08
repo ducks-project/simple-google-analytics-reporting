@@ -1,8 +1,8 @@
 <?php
 
-namespace DucksProject\Component\SimpleGoogleAnalyticsReporting\Gapi\Traits;
+namespace Ducks\Component\SimpleGoogleAnalyticsReporting\Gapi\Traits;
 
-use DucksProject\Component\SimpleGoogleAnalyticsReporting\Gapi\Tools\ArrayHelper;
+use Ducks\Component\SimpleGoogleAnalyticsReporting\Gapi\Tools\ArrayHelper;
 
 trait DynamicProperties
 {
@@ -25,7 +25,7 @@ trait DynamicProperties
 
         $name = preg_replace('/^get/', '', $name);
         foreach ($this->getObjectVars() as $value) {
-            $key = ArrayHelper::ArrayKeyExists($name, $this->$value);
+            $key = ArrayHelper::arrayKeyExists($name, $this->$value);
             if (false !== $key) {
                 return ($this->$value)[$key];
             }

@@ -1,6 +1,6 @@
 <?php
 
-namespace DucksProject\Component\SimpleGoogleAnalyticsReporting\Gapi\Tools;
+namespace Ducks\Component\SimpleGoogleAnalyticsReporting\Gapi\Tools;
 
 /**
  * @deprecated 1.0
@@ -16,7 +16,7 @@ abstract class ArrayHelper
      *
      * @return string Matching array key
      */
-    public static function ArrayKeyExists($key, $search)
+    public static function arrayKeyExists($key, $search)
     {
         if (array_key_exists($key, $search)) {
             return $key;

@@ -1,11 +1,11 @@
 <?php
 
-namespace DucksProject\Component\SimpleGoogleAnalyticsReporting\Gapi;
+namespace Ducks\Component\SimpleGoogleAnalyticsReporting\Gapi;
 
-use DucksProject\Component\SimpleGoogleAnalyticsReporting\Gapi\Entry\Account;
-use DucksProject\Component\SimpleGoogleAnalyticsReporting\Gapi\Entry\Report;
-use DucksProject\Component\SimpleGoogleAnalyticsReporting\Gapi\Traits\DynamicProperties;
-use DucksProject\Component\SimpleGoogleAnalyticsReporting\Gapi\Traits\Silent;
+use Ducks\Component\SimpleGoogleAnalyticsReporting\Gapi\Entry\Account;
+use Ducks\Component\SimpleGoogleAnalyticsReporting\Gapi\Entry\Report;
+use Ducks\Component\SimpleGoogleAnalyticsReporting\Gapi\Traits\DynamicProperties;
+use Ducks\Component\SimpleGoogleAnalyticsReporting\Gapi\Traits\Silent;
 
 /**
  * @deprecated 1.0
@@ -146,7 +146,7 @@ class Service implements Silentable
     public function requestReportData(
         $report_id,
         $dimensions = null,
-        $metrics,
+        $metrics = null,
         $sort_metric = null,
         $filter = null,
         $start_date = null,

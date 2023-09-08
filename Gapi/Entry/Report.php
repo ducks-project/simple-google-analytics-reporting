@@ -1,6 +1,6 @@
 <?php
 
-namespace DucksProject\Component\SimpleGoogleAnalyticsReporting\Gapi\Entry;
+namespace Ducks\Component\SimpleGoogleAnalyticsReporting\Gapi\Entry;
 
 class Report extends Base
 {

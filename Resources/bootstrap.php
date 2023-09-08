@@ -21,7 +21,7 @@ $gapi = [
 foreach ($gapi as $class) {
     if (!\class_exists($class, false)) {
         $class_name = \substr($class, 4) ?: 'Service';
-        \class_alias($namespace. $class_name, $class, true);
+        \class_alias($namespace . $class_name, $class, true);
     }
 }
 

@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "DucksProject\\Component\\SimpleGoogleAnalyticsReporting\\": ""
+            "Ducks\\Component\\SimpleGoogleAnalyticsReporting\\": ""
         },
         "files": [
             "Resources/bootstrap.php"

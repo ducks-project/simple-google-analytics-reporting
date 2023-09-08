@@ -1,6 +1,6 @@
 <?php
 
-namespace DucksProject\Component\SimpleGoogleAnalyticsReporting\Gapi;
+namespace Ducks\Component\SimpleGoogleAnalyticsReporting\Gapi;
 
 class Request
 {

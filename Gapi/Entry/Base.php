@@ -1,10 +1,10 @@
 <?php
 
-namespace DucksProject\Component\SimpleGoogleAnalyticsReporting\Gapi\Entry;
+namespace Ducks\Component\SimpleGoogleAnalyticsReporting\Gapi\Entry;
 
-use DucksProject\Component\SimpleGoogleAnalyticsReporting\Gapi\Silentable;
-use DucksProject\Component\SimpleGoogleAnalyticsReporting\Gapi\Traits\DynamicProperties;
-use DucksProject\Component\SimpleGoogleAnalyticsReporting\Gapi\Traits\Silent;
+use Ducks\Component\SimpleGoogleAnalyticsReporting\Gapi\Silentable;
+use Ducks\Component\SimpleGoogleAnalyticsReporting\Gapi\Traits\DynamicProperties;
+use Ducks\Component\SimpleGoogleAnalyticsReporting\Gapi\Traits\Silent;
 
 abstract class Base implements Silentable, \Stringable
 {
