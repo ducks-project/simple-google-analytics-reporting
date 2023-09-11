@@ -8,14 +8,14 @@ trait DynamicProperties
 {
     abstract public function isSilent(): bool;
 
-    protected function getObjectVars(): array
+    protected function getDynamicVars(): array
     {
-        return \get_object_vars($this) ?? [];
+        return \array_keys(\get_object_vars($this));
     }
 
     public function __call($name, $parameters)
     {
-        if (!preg_match('/^get/', $name)) {
+        if (!\preg_match('/^get(?<property>.*)$/', $name, $matches)) {
             if (!$this->isSilent()) {
                 throw new \Exception('No such function "' . $name . '"');
             } else {
@@ -23,9 +23,9 @@ trait DynamicProperties
             }
         }
 
-        $name = preg_replace('/^get/', '', $name);
-        foreach ($this->getObjectVars() as $value) {
-            $key = ArrayHelper::arrayKeyExists($name, $this->$value);
+        $property = $matches['property'];
+        foreach ($this->getDynamicVars() as $value) {
+            $key = ArrayHelper::arrayKeyExists($property, $this->$value);
             if (false !== $key) {
                 return ($this->$value)[$key];
             }

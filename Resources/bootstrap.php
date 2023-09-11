@@ -13,8 +13,6 @@ $namespace = '\\Ducks\\Component\\SimpleGoogleAnalyticsReporting\\Gapi\\';
 
 $gapi = [
     'gapi',
-    'gapiAccountEntry',
-    'gapiReportEntry',
     'gapiOAuth2',
     'gapiRequest',
 ];

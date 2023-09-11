@@ -11,7 +11,7 @@ trait Silent
         return $this->silent;
     }
 
-    public function setSilent(bool $silent)
+    public function setSilent(bool $silent): self
     {
         $this->silent = $silent;
 

@@ -18,18 +18,24 @@ abstract class ArrayHelper
      */
     public static function arrayKeyExists($key, $search)
     {
-        if (array_key_exists($key, $search)) {
-            return $key;
-        }
-        if (!(is_string($key) && is_array($search))) {
+        if (!\is_iterable($search) || !\is_string($key)) {
             return false;
         }
-        $key = strtolower($key);
-        foreach ($search as $k => $v) {
-            if (strtolower($k) == $key) {
-                return $k;
+
+        if (\array_key_exists($key, $search)) {
+            return $key;
+        }
+
+        // Note that array_change_key_case will not offer
+        // possibility to return correct case and will be O(n)
+        // \array_key in foreach will also do a copy of array...
+        $key = \strtolower($key);
+        foreach ($search as $search_key => $value) {
+            if ($key === \strtolower($search_key)) {
+                return $search_key;
             }
         }
+
         return false;
     }
 }

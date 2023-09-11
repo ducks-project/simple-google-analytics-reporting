@@ -42,9 +42,9 @@ class Service implements Silentable
 
     private $auth = null;
     private $account_entries = [];
-    private $report_aggregate_metrics = [];
-    private $report_root_parameters = [];
     private $results = [];
+    protected $report_aggregate_metrics = [];
+    protected $report_root_parameters = [];
 
     /**
      * Constructor function for new gapi instances.
@@ -422,7 +422,7 @@ class Service implements Silentable
         return $this->report_aggregate_metrics;
     }
 
-    protected function getObjectVars(): array
+    protected function getDynamicVars(): array
     {
         return [
             'report_root_parameters',

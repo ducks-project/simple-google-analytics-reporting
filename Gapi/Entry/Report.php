@@ -4,8 +4,8 @@ namespace Ducks\Component\SimpleGoogleAnalyticsReporting\Gapi\Entry;
 
 class Report extends Base
 {
-    private $metrics = [];
-    private $dimensions = [];
+    protected $metrics = [];
+    protected $dimensions = [];
 
     /**
      * Constructor function for all new gapiReportEntry instances.

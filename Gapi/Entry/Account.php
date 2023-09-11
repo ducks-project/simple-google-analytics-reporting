@@ -4,7 +4,7 @@ namespace Ducks\Component\SimpleGoogleAnalyticsReporting\Gapi\Entry;
 
 class Account extends Base
 {
-    private $properties = [];
+    protected $properties = [];
 
     /**
      * Constructor function for all new gapiAccountEntry instances.
