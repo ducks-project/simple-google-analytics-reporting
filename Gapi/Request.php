@@ -12,16 +12,69 @@ class Request
 
     private ?string $url = null;
 
+    private array $gets = [];
+    private array $posts = [];
+    private array $headers = [];
+
     private function parseVariables($variables): string
     {
         return \is_array($variables)
-            ? '?' . str_replace('&amp;', '&', urldecode(http_build_query($variables, '', '&')))
+            ? '?' . str_replace(
+                '&amp;',
+                '&',
+                urldecode(http_build_query(\array_filter($variables), '', '&'))
+            )
             : '';
     }
 
     public function __construct(string $url)
     {
         $this->url = $url;
+    }
+
+    public function addGets(array $variables): self
+    {
+        $this->gets = array_replace(
+            $this->gets,
+            $variables
+        );
+
+        return $this;
+    }
+
+    public function hasGets(): bool
+    {
+        return !empty($this->gets);
+    }
+
+    public function addPosts(array $variables): self
+    {
+        $this->posts = array_replace(
+            $this->posts,
+            $variables
+        );
+
+        return $this;
+    }
+
+    public function hasPosts(): bool
+    {
+        return !empty($this->posts);
+    }
+
+    public function addHeaders(array $variables): self
+    {
+        $this->headers = array_replace(
+            $this->headers,
+            $variables
+        );
+
+        return $this;
+    }
+
+    public function hasHeaders(): bool
+    {
+        return !empty($this->headers);
     }
 
     /**
@@ -33,7 +86,8 @@ class Request
      */
     public function getUrl($get_variables = null): string
     {
-        return $this->url . $this->parseVariables($get_variables);
+        $gets = \array_replace($this->gets, $get_variables ?? []);
+        return $this->url . $this->parseVariables($gets);
     }
 
     /**
@@ -72,33 +126,33 @@ class Request
             ? 'fopenRequest'
             : 'curlRequest';
 
-        return $this->$method($get_variables, $post_variables, $headers);
+        $this->addGets($get_variables ?? []);
+        $this->addPosts($post_variables ?? []);
+        $this->addHeaders($headers ?? []);
+
+        return $this->$method();
     }
 
     /**
      * HTTP request using PHP CURL functions
      * Requires curl library installed and configured for PHP.
-     *
-     * @param array $get_variables
-     * @param array $post_variables
-     * @param array $headers
      */
-    protected function curlRequest($get_variables = null, $post_variables = null, $headers = null)
+    protected function curlRequest()
     {
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, $this->getUrl($get_variables));
+        curl_setopt($ch, CURLOPT_URL, $this->getUrl());
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // CURL doesn't like google's cert
 
-        if (is_array($post_variables)) {
+        if ($this->hasPosts()) {
             curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post_variables, '', '&'));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($this->posts, '', '&'));
         }
 
-        if (is_array($headers)) {
+        if ($this->hasHeaders()) {
             $string_headers = [];
-            foreach ($headers as $key => $value) {
+            foreach ($this->headers as $key => $value) {
                 $string_headers[] = "$key: $value";
             }
             curl_setopt($ch, CURLOPT_HTTPHEADER, $string_headers);
@@ -123,21 +177,22 @@ class Request
      * @param array $post_variables
      * @param array $headers
      */
-    protected function fopenRequest($get_variables = null, $post_variables = null, $headers = null)
+    protected function fopenRequest()
     {
         $http_options = ['method' => 'GET', 'timeout' => 3];
 
         $string_headers = '';
-        if (is_array($headers)) {
-            foreach ($headers as $key => $value) {
+        if ($this->hasHeaders()) {
+            foreach ($this->headers as $key => $value) {
                 $string_headers .= "$key: $value\r\n";
             }
         }
 
-        if (is_array($post_variables)) {
-            $post_variables = str_replace('&amp;', '&', urldecode(http_build_query($post_variables, '', '&')));
+        if ($this->hasPosts()) {
+            $post_variables = str_replace('&amp;', '&', urldecode(http_build_query($this->posts, '', '&')));
             $http_options['method'] = 'POST';
-            $string_headers = "Content-type: application/x-www-form-urlencoded\r\n" . "Content-Length: " . strlen($post_variables) . "\r\n" . $string_headers;
+            $string_headers = "Content-type: application/x-www-form-urlencoded\r\n"
+                . "Content-Length: " . strlen($post_variables) . "\r\n" . $string_headers;
             $http_options['header'] = $string_headers;
             $http_options['content'] = $post_variables;
         } else {

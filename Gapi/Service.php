@@ -100,50 +100,60 @@ class Service implements Silentable
         return $this->auth->revokeToken();
     }
 
+    public function runAccount(Request $request)
+    {
+        $response = $request->get();
+
+        // HTTP 2xx
+        if ('2' == substr($response['code'], 0, 1)) {
+            return $this->accountObjectMapper($response['body']);
+        }
+
+        if (!$this->isSilent()) {
+            throw new \Exception(
+                'GAPI: Failed to request data. Error: "'
+                    . $this->cleanErrorResponse($response['body'] ?? '') . '"'
+            );
+        }
+
+        return null;
+    }
+
+    public function buildAccountRequest(
+        $start_index = 1,
+        $max_results = 1000
+    ): Request {
+        $variables = [
+            'start-index' => $start_index,
+            'max-results' => $max_results,
+        ];
+
+        $request = new Request(static::account_data_url);
+        $request->addGets($variables)
+            ->addHeaders($this->auth->generateAuthHeader());
+
+        return $request;
+    }
+
     /**
      * Request account data from Google Analytics.
      *
      * @param int $start_index OPTIONAL: Start index of results
      * @param int $max_results OPTIONAL: Max results returned
      */
-    public function requestAccountData($start_index = 1, $max_results = 1000)
-    {
-        $get_variables = [
-            'start-index' => $start_index,
-            'max-results' => $max_results,
-        ];
-        $url = new Request(static::account_data_url);
-        $response = $url->get($get_variables, $this->auth->generateAuthHeader());
-
-        if ('2' == substr($response['code'], 0, 1)) {
-            return $this->accountObjectMapper($response['body']);
-        }
-
-        if (!$this->isSilent()) {
-            throw new \Exception('GAPI: Failed to request account data. Error: "' . \strip_tags($response['body'] ?? '') . '"');
-        }
-
-        return null;
+    public function requestAccountData(
+        $start_index = 1,
+        $max_results = 1000
+    ) {
+        return $this->runAccount(
+            $this->buildAccountRequest(
+                $start_index,
+                $max_results
+            )
+        );
     }
 
-    /**
-     * Request report data from Google Analytics.
-     *
-     * $report_id is the Google report ID for the selected account
-     *
-     * $parameters should be in key => value format
-     *
-     * @param string $report_id
-     * @param array $dimensions Google Analytics dimensions e.g. array('browser')
-     * @param array $metrics Google Analytics metrics e.g. array('pageviews')
-     * @param array $sort_metric OPTIONAL: Dimension or dimensions to sort by e.g.('-visits')
-     * @param string $filter OPTIONAL: Filter logic for filtering results
-     * @param string $start_date OPTIONAL: Start of reporting period
-     * @param string $end_date OPTIONAL: End of reporting period
-     * @param int $start_index OPTIONAL: Start index of results
-     * @param int $max_results OPTIONAL: Max results returned
-     */
-    public function requestReportData(
+    public function buildReportRequest(
         $report_id,
         $dimensions = null,
         $metrics = null,
@@ -230,8 +240,16 @@ class Service implements Silentable
 
         $parameters['prettyprint'] = static::dev_mode ? 'true' : 'false';
 
-        $url = new Request(static::report_data_url);
-        $response = $url->get($parameters, $this->auth->generateAuthHeader());
+        $request = new Request(static::report_data_url);
+        $request->addGets($parameters)
+            ->addHeaders($this->auth->generateAuthHeader());
+
+        return $request;
+    }
+
+    public function runReport(Request $request)
+    {
+        $response = $request->get();
 
         // HTTP 2xx
         if ('2' == substr($response['code'], 0, 1)) {
@@ -240,11 +258,55 @@ class Service implements Silentable
 
         if (!$this->isSilent()) {
             throw new \Exception(
-                'GAPI: Failed to request report data. Error: "' . $this->cleanErrorResponse($response['body'] ?? '') . '"'
+                'GAPI: Failed to request report data. Error: "'
+                . $this->cleanErrorResponse($response['body'] ?? '') . '"'
             );
         }
 
         return null;
+    }
+
+    /**
+     * Request report data from Google Analytics.
+     *
+     * $report_id is the Google report ID for the selected account
+     *
+     * $parameters should be in key => value format
+     *
+     * @param string $report_id
+     * @param array $dimensions Google Analytics dimensions e.g. array('browser')
+     * @param array $metrics Google Analytics metrics e.g. array('pageviews')
+     * @param array $sort_metric OPTIONAL: Dimension or dimensions to sort by e.g.('-visits')
+     * @param string $filter OPTIONAL: Filter logic for filtering results
+     * @param string $start_date OPTIONAL: Start of reporting period
+     * @param string $end_date OPTIONAL: End of reporting period
+     * @param int $start_index OPTIONAL: Start index of results
+     * @param int $max_results OPTIONAL: Max results returned
+     */
+    public function requestReportData(
+        $report_id,
+        $dimensions = null,
+        $metrics = null,
+        $sort_metric = null,
+        $filter = null,
+        $start_date = null,
+        $end_date = null,
+        $start_index = 1,
+        $max_results = 10000
+    ) {
+        return $this->runReport(
+            $this->buildReportRequest(
+                $report_id,
+                $dimensions,
+                $metrics,
+                $sort_metric,
+                $filter,
+                $start_date,
+                $end_date,
+                $start_index,
+                $max_results
+            )
+        );
     }
 
     /**
@@ -271,7 +333,7 @@ class Service implements Silentable
      *
      * @return string Compatible filter string
      */
-    protected function processFilter($filter)
+    public function processFilter($filter)
     {
         $valid_operators = '(!~|=~|==|!=|>|<|>=|<=|=@|!@)';
 
